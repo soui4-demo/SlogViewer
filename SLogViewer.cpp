@@ -66,7 +66,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
             return 1;
         }
 #else 
-        CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
+        pResProvider.Attach(souiFac.CreateResProvider(RES_PE));
         pResProvider->Init((WPARAM)hInstance, 0);
 #endif
 
