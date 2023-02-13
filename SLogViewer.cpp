@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "MainDlg.h"
 #include "SColorizeText.h"
-
+#include <SouiFactory.h>
 
 #ifdef _DEBUG
 #define RES_TYPE 0
@@ -26,7 +26,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     int nRet = 0;
     
     SComMgr *pComMgr = new SComMgr;
-
+	SouiFactory souiFac;
     //将程序的运行路径修改到项目所在目录所在的目录
     TCHAR szCurrentDir[MAX_PATH] = { 0 };
     GetModuleFileName(NULL, szCurrentDir, sizeof(szCurrentDir));
@@ -46,7 +46,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         SApplication *theApp = new SApplication(pRenderFactory, hInstance);
         {
             CAutoRefPtr<IResProvider> sysResProvider;
-            CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
+            sysResProvider.Attach(souiFac.CreateResProvider(RES_PE));
             sysResProvider->Init((WPARAM)hInstance, 0);
             theApp->LoadSystemNamedResource(sysResProvider);
         }
@@ -59,7 +59,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
         CAutoRefPtr<IResProvider>   pResProvider;
 #if (RES_TYPE == 0)
-        CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+        pResProvider.Attach(souiFac.CreateResProvider(RES_FILE));
         if (!pResProvider->Init((LPARAM)_T("uires"), 0))
         {
             SASSERT(0);
@@ -78,7 +78,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 		if(hSysResource)
 		{
 			CAutoRefPtr<IResProvider> sysSesProvider;
-			CreateResProvider(RES_PE,(IObjRef**)&sysSesProvider);
+			sysSesProvider.Attach(souiFac.CreateResProvider(RES_PE));
 			sysSesProvider->Init((WPARAM)hSysResource,0);
 			theApp->LoadSystemNamedResource(sysSesProvider);
 		}
@@ -90,12 +90,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         if(trans)
         {//加载语言翻译包
             theApp->SetTranslator(trans);
-            pugi::xml_document xmlLang;
+            SXmlDoc xmlLang;
             if(theApp->LoadXmlDocment(xmlLang,_T("languages:lang_cn")))
             {
                 CAutoRefPtr<ITranslator> langCN;
                 trans->CreateTranslator(&langCN);
-                langCN->Load(&xmlLang.child(L"language"),1);//1=LD_XML
+                langCN->Load(&xmlLang.root().child(L"language"),1);//1=LD_XML
                 trans->InstallTranslator(langCN);
             }
         }

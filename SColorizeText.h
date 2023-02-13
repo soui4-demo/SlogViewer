@@ -4,7 +4,7 @@ namespace SOUI
 {
 	class SColorizeText : public SWindow
 	{
-		SOUI_CLASS_NAME(SColorizeText,L"colorizeText")
+		DEF_SOBJECT(SWindow,L"colorizeText")
 	public:
 		SColorizeText(void);
 		~SColorizeText(void);

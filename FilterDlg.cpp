@@ -86,16 +86,16 @@ protected:
 		return tag1->tag.Compare(tag2->tag);
 	}
 
-	virtual int getCount()
+	virtual int WINAPI getCount()
 	{
 		return m_lstTagCheck.GetCount();
 	}
 
-	virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+	virtual void WINAPI getView(int position, SItemPanel * pItem, SXmlNode xmlTemplate)
 	{
 		if(pItem->GetChildrenCount() == 0)
 		{
-			pItem->InitFromXml(xmlTemplate);
+			pItem->InitFromXml(&xmlTemplate);
 		}
 
 		SCheckBox *pCheck = pItem->FindChildByID2<SCheckBox>(R.id.chk_tag);
@@ -107,9 +107,9 @@ protected:
 		pCheck->GetEventSet()->subscribeEvent(EventCmd::EventID,Subscriber(&CFilterTagAdapter::OnCheck,this));
 	}
 
-	bool OnCheck(EventArgs *e)
+	BOOL OnCheck(EventArgs *e)
 	{
-		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->Sender());
 		int pos = (int)pCheck->GetUserData();
 		m_lstTagCheck[pos].bSelected = !!pCheck->IsChecked();
 		NotifyListener();
@@ -179,16 +179,16 @@ protected:
 		return (int)pid1->pid - (int)pid2->pid;
 	}
 
-	virtual int getCount()
+	virtual int WINAPI getCount()
 	{
 		return m_lstPidCheck.GetCount();
 	}
 
-	virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+	virtual void WINAPI getView(int position, SItemPanel * pItem, SXmlNode xmlTemplate)
 	{
 		if(pItem->GetChildrenCount() == 0)
 		{
-			pItem->InitFromXml(xmlTemplate);
+			pItem->InitFromXml(&xmlTemplate);
 		}
 
 		SCheckBox *pCheck = pItem->FindChildByID2<SCheckBox>(R.id.chk_pid);
@@ -200,9 +200,9 @@ protected:
 		pCheck->GetEventSet()->subscribeEvent(EventCmd::EventID,Subscriber(&CFilterPidAdapter::OnCheck,this));
 	}
 
-	bool OnCheck(EventArgs *e)
+	BOOL OnCheck(EventArgs *e)
 	{
-		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->Sender());
 		int pos = (int)pCheck->GetUserData();
 		m_lstPidCheck[pos].bSelected = !!pCheck->IsChecked();
 		NotifyListener();
@@ -270,16 +270,16 @@ protected:
 		return (int)tid1->tid - (int)tid2->tid;
 	}
 
-	virtual int getCount()
+	virtual int WINAPI getCount()
 	{
 		return m_lstTidCheck.GetCount();
 	}
 
-	virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+	virtual void WINAPI getView(int position, SItemPanel * pItem, SXmlNode xmlTemplate)
 	{
 		if(pItem->GetChildrenCount() == 0)
 		{
-			pItem->InitFromXml(xmlTemplate);
+			pItem->InitFromXml(&xmlTemplate);
 		}
 
 		SCheckBox *pCheck = pItem->FindChildByID2<SCheckBox>(R.id.chk_tid);
@@ -291,9 +291,9 @@ protected:
 		pCheck->GetEventSet()->subscribeEvent(EventCmd::EventID,Subscriber(&CFilterTidAdapter::OnCheck,this));
 	}
 
-	bool OnCheck(EventArgs *e)
+	BOOL OnCheck(EventArgs *e)
 	{
-		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->Sender());
 		int pos = (int)pCheck->GetUserData();
 		m_lstTidCheck[pos].bSelected = !!pCheck->IsChecked();
 		NotifyListener();

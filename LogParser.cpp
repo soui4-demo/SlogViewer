@@ -60,7 +60,7 @@ CLogParse::CLogParse(const SStringW & strName,const SStringW & strFmt, const SSt
 		SStringW strSep=strFmt.Mid(pos,nFind-pos);
 		m_seps.Add(strSep);
 		m_fields.Add(fi);
-		pos = strFmt.Find(KLogField_Tail,nFind+2+KLogFields[fi.field].nLen);
+		pos = strFmt.FindChar(KLogField_Tail,nFind+2+KLogFields[fi.field].nLen);
 		if(pos==-1) break;
 		pos += 1;//sizeof(KLogField_Tail)
 	}

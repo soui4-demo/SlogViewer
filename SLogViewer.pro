@@ -7,17 +7,17 @@ CONFIG(x64){
 TARGET = $$TARGET"64"
 }
 
-include($$(SOUI3PATH)/demo_com.pri)
+include($$(SOUI4PATH)/demo_com.pri)
 
 INCLUDEPATH += . \
-		$(SOUI3PATH)/controls.extend \
-		$(SOUI3PATH)/third-part/Scintilla/include \
+		$(SOUI4PATH)/controls.extend \
+		$(SOUI4PATH)/third-part/Scintilla/include \
 			   
 CONFIG(debug,debug|release){
-	LIBS += utilitiesd.lib soui3d.lib scintillad.lib imm32.lib
+	LIBS += utilities4d.lib soui4d.lib scintillad.lib imm32.lib
 }
 else{
-	LIBS += utilities.lib soui3.lib scintilla.lib imm32.lib
+	LIBS += utilities4.lib soui4.lib scintilla.lib imm32.lib
 }
 
 PRECOMPILED_HEADER = stdafx.h
@@ -37,8 +37,8 @@ HEADERS += droptarget.h \
            whwindow.h \
            magnet/MagnetFrame.h \
            res/resource.h \
-           $(SOUI3PATH)/controls.extend/SRealWndHandler_Scintilla.h \
-	   $(SOUI3PATH)/controls.extend/ScintillaWnd.h
+           $(SOUI4PATH)/controls.extend/SRealWndHandler_Scintilla.h \
+	   $(SOUI4PATH)/controls.extend/ScintillaWnd.h
 
 SOURCES += FilterDlg.cpp \
            LogParser.cpp \
@@ -49,7 +49,7 @@ SOURCES += FilterDlg.cpp \
            SLogAdapter.cpp \
            SLogViewer.cpp \
            magnet/MagnetFrame.cpp \
-           $(SOUI3PATH)/controls.extend/SRealWndHandler_Scintilla.cpp \
-           $(SOUI3PATH)/controls.extend/ScintillaWnd.cpp
+           $(SOUI4PATH)/controls.extend/SRealWndHandler_Scintilla.cpp \
+           $(SOUI4PATH)/controls.extend/ScintillaWnd.cpp
 
 RC_FILE += SLogViewer.rc

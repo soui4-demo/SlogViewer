@@ -78,7 +78,7 @@ namespace SOUI
 				pLogInfo = m_lstLogs.GetAt(m_lstLogs.GetCount()-1);
 				pLogInfo->strContent += SStringW(L"\\n")+pszLine;
 
-				SLOG_INFO("invalid line:"<<pszLine<<"\n");
+				SSLOGI()<<"invalid line:"<<pszLine;
 			}
 			return NULL;
 		}else
@@ -170,11 +170,11 @@ namespace SOUI
 		notifyDataSetChanged();
 	}
 
-	void SLogAdapter::getView(int position, SWindow * pItem,pugi::xml_node xmlTemplate)
+	void SLogAdapter::getView(int position, SItemPanel * pItem, SXmlNode xmlTemplate)
 	{
 		if(pItem->GetChildrenCount()==0)
 		{
-			pItem->InitFromXml(xmlTemplate);
+			pItem->InitFromXml(&xmlTemplate);
 		}
 
 		SLogInfo * pLogInfo = GetLogList()->GetAt(position);
@@ -493,7 +493,7 @@ namespace SOUI
 		doFilter();
 	}
 
-	bool SLogAdapter::IsColumnVisible(int iCol) const
+	BOOL SLogAdapter::IsColumnVisible(int iCol) const
 	{
 		if(!m_logParser) return true;
 		if(iCol == col_line_index) return true;
@@ -505,9 +505,9 @@ namespace SOUI
 		m_pScilexer = pWnd;
 	}
 
-	bool SLogAdapter::OnItemDblClick(EventArgs *e)
+	BOOL SLogAdapter::OnItemDblClick(EventArgs *e)
 	{
-		SItemPanel * pItem = sobj_cast<SItemPanel>(e->sender);
+		SItemPanel * pItem = sobj_cast<SItemPanel>(e->Sender());
 		int index = pItem->GetItemIndex();
 		SLogInfo * logInfo = GetLogList()->GetAt(index);
 		m_pScilexer->SendMessage(SCI_GOTOLINE,logInfo->iLine-1,0);

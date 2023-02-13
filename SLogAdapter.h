@@ -2,7 +2,7 @@
 
 #include <helper/SAdapterBase.h>
 #include <helper/STime.h>
-#include <unknown/obj-ref-impl.hpp>
+#include <helper/obj-ref-impl.hpp>
 #include <souicoll.h>
 
 namespace SOUI
@@ -177,12 +177,12 @@ namespace SOUI
 
 		void doFilter();
 
-		bool OnItemDblClick(EventArgs *e);
+		BOOL OnItemDblClick(EventArgs *e);
 	protected:
-		virtual void getView(int position, SWindow * pItem,pugi::xml_node xmlTemplate);
-		virtual SStringW GetColumnName(int iCol) const;
-		virtual bool IsColumnVisible(int iCol) const;
-		virtual int getCount();
+		virtual void WINAPI getView(int position, SItemPanel * pItem, SXmlNode xmlTemplate);
+		virtual SStringW WINAPI GetColumnName(int iCol) const;
+		virtual BOOL WINAPI IsColumnVisible(int iCol) const;
+		virtual int WINAPI getCount();
 	private:
 		SArray<SLogInfo*> *m_lstFilterResult;
 

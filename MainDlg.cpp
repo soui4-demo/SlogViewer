@@ -61,12 +61,12 @@ BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 	::RegisterDragDrop(m_hWnd,GetDropTarget());
 
 	IDropTarget *pDT = new CDropTarget(this);
-	GetContainer()->RegisterDragDrop(m_lvLogs->GetSwnd(),pDT);
+	GetRoot()->GetContainer()->RegisterDragDrop(m_lvLogs->GetSwnd(),pDT);
 	pDT->Release();
 
 	SRealWnd * pRealWnd = FindChildByID2<SRealWnd>(R.id.real_scilexer);
 	SASSERT(pRealWnd);
-	m_pSciter = (CScintillaWnd *)pRealWnd->GetUserData();
+	m_pSciter = (CScintillaWnd *)pRealWnd->GetData();
 	m_pSciter->SendMessage(SCI_USEPOPUP,0,0);
 	m_logAdapter->SetScintillaWnd(m_pSciter);
 	return 0;
@@ -86,19 +86,19 @@ void CMainDlg::OnLanguage(const SStringT & strLang)
 	ITranslatorMgr *pTransMgr = SApplication::getSingletonPtr()->GetTranslator();
 	SASSERT(pTransMgr);
 
-	pugi::xml_document xmlLang;
+	SXmlDoc xmlLang;
 	if (SApplication::getSingletonPtr()->LoadXmlDocment(xmlLang, SStringT().Format(_T("languages:%s"),strLang)))
 	{
 		CAutoRefPtr<ITranslator> lang;
 		pTransMgr->CreateTranslator(&lang);
-		lang->Load(&xmlLang.child(L"language"), 1);//1=LD_XML
+		lang->Load(&xmlLang.root().child(L"language"), 1);//1=LD_XML
 		wchar_t szName[64];
 		lang->GetName(szName);
 		pTransMgr->SetLanguage(szName);
 		pTransMgr->InstallTranslator(lang);
-		SDispatchMessage(UM_SETLANGUAGE,0,0);
-		m_pFilterDlg->SDispatchMessage(UM_SETLANGUAGE,0,0);
-		if(m_pFindDlg) m_pFindDlg->SDispatchMessage(UM_SETLANGUAGE,0,0);
+		GetRoot()->SDispatchMessage(UM_SETLANGUAGE,0,0);
+		m_pFilterDlg->GetRoot()->SDispatchMessage(UM_SETLANGUAGE,0,0);
+		if(m_pFindDlg) m_pFindDlg->GetRoot()->SDispatchMessage(UM_SETLANGUAGE,0,0);
 	}
 }
 
@@ -330,11 +330,11 @@ void CMainDlg::OnContextMenu(HWND hwnd, CPoint point)
 {
 	if(hwnd == m_pSciter->m_hWnd)
 	{
-		pugi::xml_node xmlMenu = SRicheditMenuDef::getSingleton().GetMenuXml();
+		SXmlNode xmlMenu = SRicheditMenuDef::getSingleton().GetMenuXml();
 		if(xmlMenu)
 		{
 			SMenu menu;
-			if(menu.LoadMenu(xmlMenu))
+			if(menu.LoadMenu2(&xmlMenu))
 			{
 				BOOL canPaste=m_pSciter->SendMessage(SCI_CANPASTE);
 				BOOL hasSel=m_pSciter->SendMessage(SCI_GETSELECTIONEMPTY)==0;
@@ -452,7 +452,7 @@ void CMainDlg::OnMenu()
 
 	SWindow * pSender = FindChildByID(R.id.btn_menu);
 	CRect rc = pSender->GetWindowRect();
-	ClientToScreen(&rc);
+	ClientToScreen2(&rc);
 	UINT uCmd = menu.TrackPopupMenu(TPM_RETURNCMD,rc.left,rc.bottom,m_hWnd);
 	switch(uCmd)
 	{
@@ -491,9 +491,9 @@ LRESULT CMainDlg::OnNotify(int idCtrl, LPNMHDR pnmh)
 			free(pBuf);
 			m_pSciter->UpdateLineNumberWidth();
 
-			LPWSTR pBufw = strBuf.LockBuffer();
+			LPWSTR pBufw = strBuf.GetBuffer(-1);
 			BOOL bOK = m_logAdapter->LoadMemory(pBufw);
-			strBuf.UnlockBuffer();
+			strBuf.ReleaseBuffer();
 
 			UpdateUI();
 		}

@@ -4,11 +4,11 @@
 
 cmake_minimum_required(VERSION 3.4.3)
 project(SLogViewer)
-file (TO_CMAKE_PATH "$ENV{SOUIPATH}" SOUI_ROOT)
+file (TO_CMAKE_PATH "$ENV{SOUI4PATH}" SOUI_ROOT)
 
 message(STATUS "SOUI_ROOT: ${SOUI_ROOT}")
 if ("${SOUI_ROOT}" STREQUAL "")
-	message(FATAL_ERROR "FATAL:can't find env variable SOUIPATH, clone soui core and install wizard first, please.")
+	message(FATAL_ERROR "FATAL:can't find env variable SOUI4PATH, clone soui core and install wizard first, please.")
 endif()
 
 include(${SOUI_ROOT}/__cmake/cotire.cmake)
@@ -58,11 +58,9 @@ source_group("Resource Files" FILES ${CURRENT_RC})
 link_directories(${SOUI_ROOT}/bin)
 add_executable(SLogViewer WIN32 ${CURRENT_HEADERS} ${CURRENT_SRCS} ${CURRENT_SOUIS} ${CURRENT_RC} ${EXTENDCOTROLS})
 
-#add_dependencies(SLogViewer soui-sys-resource)
-#target_link_libraries(SLogViewer utilities soui ${COM_LIBS} Scintilla imm32)
 target_link_libraries(SLogViewer
-        debug souid optimized soui
-        debug utilitiesd optimized utilities
+        debug soui4d optimized soui
+        debug utilities4d optimized utilities
         debug Scintillad optimized Scintilla
         imm32
 )
