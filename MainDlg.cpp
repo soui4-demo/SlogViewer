@@ -67,8 +67,11 @@ BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 	SRealWnd * pRealWnd = FindChildByID2<SRealWnd>(R.id.real_scilexer);
 	SASSERT(pRealWnd);
 	m_pSciter = (CScintillaWnd *)pRealWnd->GetData();
-	m_pSciter->SendMessage(SCI_USEPOPUP,0,0);
-	m_logAdapter->SetScintillaWnd(m_pSciter);
+	if(m_pSciter)
+	{
+		m_pSciter->SendMessage(SCI_USEPOPUP,0,0);
+		m_logAdapter->SetScintillaWnd(m_pSciter);
+	}
 	return 0;
 }
 
@@ -87,7 +90,7 @@ void CMainDlg::OnLanguage(const SStringT & strLang)
 	SASSERT(pTransMgr);
 
 	SXmlDoc xmlLang;
-	if (SApplication::getSingletonPtr()->LoadXmlDocment(xmlLang, SStringT().Format(_T("languages:%s"),strLang)))
+	if (SApplication::getSingletonPtr()->LoadXmlDocment(xmlLang, SStringT().Format(_T("languages:%s"),strLang.c_str())))
 	{
 		CAutoRefPtr<ITranslator> lang;
 		pTransMgr->CreateTranslator(&lang);

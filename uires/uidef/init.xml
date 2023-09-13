@@ -15,6 +15,7 @@
 
   <objattr>
     <button padding="10dp,5dp,10dp,5dp"/>
+    <imgbtn padding="0"/>
     <edit class="cls_border"/>
     <link class="cls_btn_weblink"/>
   </objattr>

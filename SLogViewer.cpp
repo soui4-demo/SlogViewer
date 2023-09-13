@@ -104,7 +104,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         // BLOCK: Run application
         {
             CMainDlg dlgMain;
-            dlgMain.Create(GetActiveWindow(),WS_CLIPCHILDREN);
+            dlgMain.Create(GetActiveWindow());
             dlgMain.SendMessage(WM_INITDIALOG);
             dlgMain.CenterWindow(dlgMain.m_hWnd);
             dlgMain.ShowWindow(SW_SHOWNORMAL);
